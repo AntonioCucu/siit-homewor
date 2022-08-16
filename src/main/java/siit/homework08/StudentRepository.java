@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,10 +17,14 @@ public class StudentRepository {
     Comparator<Student> ageComp = (Student o1, Student o2) -> (o1.getAge().compareTo(o2.getAge()));
     Comparator<Student> nameComp = (Student o1, Student o2) -> (o1.getLastName().compareTo(o2.getLastName()));
 
-    public void addStudent(String firstName, String lastName, String gender, String id, Integer birthDate) {
+    public void addStudent(String firstName, String lastName, String gender, String id, String birthDate) {
 
-        String fname, lname, gen, cnp;
-        int dob;
+        String fname, lname, gen, cnp, dob;
+
+        int yearOfBirth = LocalDate.parse(
+                birthDate,
+                DateTimeFormatter.ofPattern("dd/MM/uuuu")
+        ).getYear();
 
         try {
             if (!firstName.matches("[A-Z][a-z]*")) {
@@ -48,9 +53,9 @@ public class StudentRepository {
                 throw new IllegalArgumentException("ID is mandatory!");
             } else cnp = id;
 
-            if (birthDate < 1900) {
+            if (yearOfBirth < 1900) {
                 throw new IllegalArgumentException("Year of birth has to be over 1900.");
-            } else if (birthDate > LocalDate.now().getYear() - 18) {
+            } else if (yearOfBirth > LocalDate.now().getYear() - 18) {
                 throw new IllegalArgumentException("You need to be at least 18 years old.");
             } else dob = birthDate;
 

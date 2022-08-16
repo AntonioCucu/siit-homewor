@@ -18,7 +18,7 @@ public class StudentTest {
         IllegalArgumentException exce = assertThrows(
                 IllegalArgumentException.class,
                 () -> {
-                    testStudent.addStudent("", "Something", "male", "1234123412341", 1995);
+                    testStudent.addStudent("", "Something", "male", "1234123412341", "10/10/1995");
                 }
         );
 

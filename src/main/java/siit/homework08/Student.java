@@ -1,6 +1,7 @@
 package siit.homework08;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Student {
@@ -8,17 +9,22 @@ public class Student {
     private final String lastName;
     private final String gender;
     private final String id;
-    private final Integer birthDate;
+    private final String birthDate;
     private Integer age;
 
-    public Student(String firstName, String lastName, String gender, String id, Integer birthDate) {
+    public Student(String firstName, String lastName, String gender, String id, String birthDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
         this.id = id;
         this.birthDate = birthDate;
 
-        age = LocalDate.now().getYear() - birthDate;
+        int yearOfBirth = LocalDate.parse(
+                birthDate,
+                DateTimeFormatter.ofPattern("dd/MM/uuuu")
+        ).getYear();
+
+        age = LocalDate.now().getYear() - yearOfBirth;
     }
 
     public String getId() {
