@@ -13,28 +13,32 @@ import java.util.TreeSet;
 
 public class StudentRepository {
     public final Set<Student> students = new HashSet<>();
+    //Logger initialization.
     private static final Logger log = LogManager.getLogger();
+
+    //Creating the comparators for listing the object.
     Comparator<Student> ageComp = (Student o1, Student o2) -> (o1.getAge().compareTo(o2.getAge()));
     Comparator<Student> nameComp = (Student o1, Student o2) -> (o1.getLastName().compareTo(o2.getLastName()));
 
     public void addStudent(String firstName, String lastName, String gender, String id, String birthDate) {
-
+        // Declared temporary variables to check format and create the object.
         String fname, lname, gen, cnp, dob;
 
+        // Parse dateOfBirth from string to int/date to be able to check for format/min-max age.
         int yearOfBirth = LocalDate.parse(
                 birthDate,
                 DateTimeFormatter.ofPattern("dd/MM/uuuu")
         ).getYear();
-
+        // Checking input for object constructor.
         try {
-            if (!firstName.matches("[A-Z][a-z]*")) {
-                throw new IllegalArgumentException("Wrong input format! Only letters allowed.");
-            } else if (firstName.isEmpty()) {
+            if (!firstName.matches("[a-zA-Z]+")) {
+                throw new IllegalArgumentException("(FN)Wrong input format! Only letters allowed.");
+            } else if (firstName.isEmpty() || firstName.isBlank()) {
                 throw new IllegalArgumentException("This field is mandatory!");
             } else fname = firstName;
 
-            if (!lastName.matches("[A-Z][a-z]*")) {
-                throw new IllegalArgumentException("Wrong input format! Only letters allowed.");
+            if (!lastName.matches("[a-zA-Z]+")) {
+                throw new IllegalArgumentException("(LN)Wrong input format! Only letters allowed.");
             } else if (lastName.isEmpty()) {
                 throw new IllegalArgumentException("This field is mandatory!");
             } else lname = lastName;
@@ -63,11 +67,12 @@ public class StudentRepository {
             students.add(student);
 
         } catch (IllegalArgumentException exce) {
-            log.error(exce);
+            log.error(exce.getMessage());
+            throw new IllegalArgumentException(exce);
         }
 
     }
-
+    // Iterate through list of object, find the id, remove the object (not working as intended).
     public void deleteStudent(String id) {
         int valid = 0;
 
